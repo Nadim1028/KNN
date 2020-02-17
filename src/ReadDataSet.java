@@ -2,7 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class ReadDataSet {
+public class ReadDataSet{
     String s;
     int index = 0;
     String[] arrOfString = new String[625 * 5];
@@ -11,7 +11,8 @@ public class ReadDataSet {
     String[] arrOfStr;
     Scanner sc = new Scanner(System.in);
     double[] inputArr = new double[4],squareValueArr= new double[4],distanceForSort= new double[625];
-    static Map<Double, Double> map = new HashMap<>();
+    DistanceClass[] distanceObject= new DistanceClass[625];
+
 
     public void getInput() throws FileNotFoundException
     {
@@ -39,25 +40,39 @@ public class ReadDataSet {
 
     public void distance()
     {
+
+
+        for(int i=0;i<625;i++) {
+            distanceObject[i] = new DistanceClass();
+        }
+
         System.out.println("Enter four integer value.");
         for (int i = 0; i < 4; i++) {
             inputArr[i] = sc.nextInt();
         }
 
-        for (int i = 0; i < inputDataList.length; i++) {
-            if(inputDataList[i].get(0).equals("B"))
-                distance[i].add((double) 1);
 
-            else if(inputDataList[i].get(0).equals("R"))
-                distance[i].add((double) 2);
-            else if(inputDataList[i].get(0).equals("L"))
-                distance[i].add((double) 3);
+        for (int i = 0; i < inputDataList.length; i++)
+        {
+            if(inputDataList[i].get(0).equals("B")){
+                double d=distanceWithDataSet(inputDataList[i],inputArr);
+                distanceObject[i].setValue("B",d);
+            }
 
-            distance[i].add(distanceWithDataSet(inputDataList[i],inputArr));
-            distanceForSort[i]=distance[i].get(1);
+            else if(inputDataList[i].get(0).equals("R")){
+                double d=distanceWithDataSet(inputDataList[i],inputArr);
+                distanceObject[i].setValue("R",d);
+            }
 
-           /* System.out.println(distance[i].get(0));
-            System.out.println(distance[i].get(1));*/
+            else if(inputDataList[i].get(0).equals("L")){
+                double d=distanceWithDataSet(inputDataList[i],inputArr);
+                distanceObject[i].setValue("L",d);
+            }
+
+        }
+
+        for(int i=0;i<555;i++) {
+        //    System.out.println(distanceObject[i].getType()+","+distanceObject[i].getDistance());
         }
     }
 
@@ -82,67 +97,60 @@ public class ReadDataSet {
         return dist;
     }
 
-    public void nearestNeighbourFinder(){
-       Arrays.sort(distanceForSort);
-
-        for(int i=0;i<distanceForSort.length;i++){
-           System.out.println(distanceForSort[i]);
-            System.out.println(distance[i]);
-           distance[i].set(1,distanceForSort[i]);
-           distance[i].set(0,distance[i].get(0));
-        }
-
-        System.out.println("New Sorted Array............................................................");
-
-        for(int i=0;i<625;i++){
-            System.out.println(distance[i]);
-            //map.put(distance[i].get(0),distance[i].get(1));
-        }
-
-
-
-
-       /* System.out.println("Enter the value of k.");
-        int k=sc.nextInt();
-        for(int i=0;i<k;i++){
-            System.out.println(distance[i]);
-        }*/
-
-        /*
-        System.out.println(map);
-
-        Map<Double, Double> hashMap = sortByValue((HashMap<Double, Double>) map);
-        //HashMap<Double, Double> h1= sortByValue(map);
-        for (Map.Entry<Double, Double> en : hashMap.entrySet()) {
-            System.out.println("Key = " + en.getKey() +
-                    ", Value = " + en.getValue());
-        }*/
-
-
-
-    }
-
-    public static HashMap<Double, Double> sortByValue(HashMap<Double, Double> hm)
+    public void nearestNeighbourFinder()
     {
-        // Create a list from elements of HashMap
-        List<Map.Entry<Double, Double> > list =
-                new LinkedList<Map.Entry<Double, Double> >(hm.entrySet());
-
-        // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<Double, Double> >() {
-            public int compare(Map.Entry<Double, Double> o1,
-                               Map.Entry<Double, Double> o2)
-            {
-                return (o1.getValue()).compareTo(o2.getValue());
-            }
-        });
-
-        // put data from sorted list to hashmap
-        HashMap<Double, Double> temp = new LinkedHashMap<Double, Double>();
-        for (Map.Entry<Double, Double> aa : list) {
-            temp.put(aa.getKey(), aa.getValue());
+        Arrays.sort(distanceObject);
+        double epsylon=0.00001;
+        int[] counter= new int[3];
+        double[] weight= new double[3],finalWeight=new double[3];
+        for(int i=0;i<counter.length;i++){
+            counter[i]=0;
+            weight[0]=0;
         }
-        return temp;
+
+        for(int i=0;i<555;i++) {
+           // System.out.println(distanceObject[i].getType()+","+distanceObject[i].getDistance());
+        }
+
+        System.out.println("Enter the value of k.");
+        int k=sc.nextInt();
+
+        for(int i=0;i<k;i++){
+            System.out.println(distanceObject[i].getType()+","+distanceObject[i].getDistance());
+            if(distanceObject[i].getType().equals("B")){
+                counter[0]++;
+                weight[0] +=(1 / (distanceObject[i].getDistance() + epsylon));
+            }
+
+            else if(distanceObject[i].getType().equals("R")){
+                counter[1]++;
+                weight[1] +=(1 / (distanceObject[i].getDistance() + epsylon));
+            }
+            else if(distanceObject[i].getType().equals("L")){
+                counter[2]++;
+                weight[2] +=(1 / (distanceObject[i].getDistance() + epsylon));
+            }
+
+        }
+
+        String s="BRL";
+        int resultIndex=0;
+        double maxWeight=-1;
+
+        for(int i=0;i<counter.length;i++){
+           finalWeight[i]=weight[i]/counter[i];
+           if(finalWeight[i]>maxWeight)
+           {
+               maxWeight=finalWeight[i];
+               resultIndex=i;
+           }
+
+            System.out.println(counter[i]+","+finalWeight[i]);
+        }
+
+        System.out.println("Max Weight = "+maxWeight);
+        System.out.println("The nearest neighbour of input is = "+s.charAt(resultIndex));
+
     }
 
 }
