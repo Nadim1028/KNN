@@ -23,12 +23,10 @@ public class ReadDataSet{
 
         File f = new File("data/balance-scale.data");
         Scanner input = new Scanner(f);
-        while (input.hasNextLine()) {
-            // System.out.println(input.nextLine());
+        while (input.hasNextLine())
+        {
             s = input.nextLine();
-
             arrOfStr = s.split(",", 5);
-
             for (String a : arrOfStr) {
                 inputDataList[index].add(a);
                 //System.out.println(a);
@@ -41,8 +39,8 @@ public class ReadDataSet{
     public void distance()
     {
 
-
-        for(int i=0;i<625;i++) {
+        for(int i=0;i<625;i++)
+        {
             distanceObject[i] = new DistanceClass();
         }
 
@@ -76,9 +74,8 @@ public class ReadDataSet{
         }
     }
 
-    public double distanceWithDataSet(ArrayList<String> inputDataList, double[] inputArr){
-
-        //= Math.sqrt(squareOfValue(inputDataList, inputArr));
+    public double distanceWithDataSet(ArrayList<String> inputDataList, double[] inputArr)
+    {
         double d;
         for(int j=1;j<inputDataList.size();j++){
             squareValueArr[j-1] =  Double.parseDouble(inputDataList.get(j));
@@ -137,6 +134,7 @@ public class ReadDataSet{
         int resultIndex=0;
         double maxWeight=-1;
 
+        System.out.println("Weight of the groups:-");
         for(int i=0;i<counter.length;i++){
            finalWeight[i]=weight[i]/counter[i];
            if(finalWeight[i]>maxWeight)
@@ -145,12 +143,11 @@ public class ReadDataSet{
                resultIndex=i;
            }
 
-            System.out.println(counter[i]+","+finalWeight[i]);
+            System.out.println(finalWeight[i]);
         }
 
         System.out.println("Max Weight = "+maxWeight);
         System.out.println("The nearest neighbour of input is = "+s.charAt(resultIndex));
-
     }
 
 }
