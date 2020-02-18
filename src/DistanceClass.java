@@ -16,7 +16,9 @@ public class DistanceClass implements Comparable<DistanceClass>
     }
 
     @Override
-    public int compareTo(DistanceClass distanceClass) {
-        return (distanceClass.getDistance() - this.getDistance()) > 0 ? -1:1;
+    public int compareTo(DistanceClass distanceClass)
+    {
+        //return  (distanceClass.getDistance() - this.getDistance())>= 0 ? -1:1;
+        return Double.compare(distanceClass.getDistance(), this.getDistance());
     }
 }

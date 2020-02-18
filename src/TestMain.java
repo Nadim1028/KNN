@@ -5,8 +5,6 @@ public class TestMain {
        NearestNeighbour n= new NearestNeighbour();
        n.getInput();
        n.fiveFolding();
-       n.distance();
-       n.nearestNeighbourFinder();
-
+       n.crossValidation();
     }
 }
